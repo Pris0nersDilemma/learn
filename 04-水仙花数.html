@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var num=prompt("请输入一个三位数");
+			if(isNaN(num))
+				{alert("请正确输入一个三位数")}
+			else{
+				var num1=cube(num%10/1);
+				var num2=cube(num%100/10);
+				var num3=cube(num%1000/100);
+				if(num==num1+num2+num3)
+					{alert("这是个水仙数")}
+				else{alert("这不是个水仙数")};
+			};
+			function cube(x){return parseInt(x)*parseInt(x)*parseInt(x);}
+		</script>
+	</body>
+</html>

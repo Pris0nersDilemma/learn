@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>计算器</title>
+		<style type="text/css">
+			div{
+				text-align: center;
+				margin-top: 100px;}
+			input{
+				width: 40px;height: 20px;
+				border-radius: 5px;
+				text-align: center;
+				border: 1px #666 solid;
+				color: #000;
+				outline: none;}
+			input:nth-child(3){
+				background: rgba(0,0,0,0)}
+			button{
+				margin-left: 20px;
+				border-radius: 5px;
+				outline: none;}
+		</style>
+	</head>
+	<body>
+		<div>
+		<input type="text" id="num1">
+		+
+		<input type="text" id="num2">
+		=
+		<input type="text" id="num3" disabled>
+		<button onclick="calc()">计算</button>
+		</div>
+		<script>
+			function calc() {
+// 				var input1 = document.getElementById("num1");
+// 				var input2 = document.getElementById("num2");
+// 				var num1 = input1.value;
+// 				var num2 = input2.value;
+// 				缩写
+// 				var input1 = document.getElementById("num1").value;
+// 				var input2 = document.getElementById("num2").value;
+// 				再缩写
+// 				document.getElementById("num3").value = (Number(input1)+Number(input2));
+// 				再再缩写
+ 				document.getElementById("num3").value = (Number(document.getElementById("num1").value)+Number(document.getElementById("num2").value));
+				
+			}
+		</script>
+		
+		
+		
+	</body>
+</html>
