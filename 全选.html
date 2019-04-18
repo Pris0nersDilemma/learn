@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<input type="checkbox" name="" id="" value="" />
+		<p>
+			<input type="checkbox" name="" id="" value="" />
+			<input type="checkbox" name="" id="" value="" />
+			<input type="checkbox" name="" id="" value="" />
+		</p>
+		<script type="text/javascript">
+			//获取input
+			var all=document.querySelector("input");
+			var checks=document.querySelector("p").querySelectorAll("input");
+			//检查是否获取成功
+			console.log(all);
+			console.log(checks);
+			//为避免使用循环判断是否已经勾选所有选项,而使用计数器
+			var count=0;
+			//给全选选项绑定事件
+			all.onchange=function(){
+				for(var i=0;i<checks.length;i++){
+					checks[i].checked=all.checked;
+					//count=checks.length; 全选再取消全选后,点分选项count计数到4
+					count=this.checked?checks.length:0;
+					//检查count变化
+					console.log(count);
+				};
+			};
+			//使用循环给每个分选项绑定事件
+			for(var i=0;i<checks.length;i++){
+				checks[i].onchange=function(){
+					//count+=checks[i].checked?1:-1; 会报错:循环绑定事件使用this，不能使用变量
+					count+=this.checked?1:-1;
+					all.checked=count===checks.length;
+					//检查count变化
+					console.log(count);
+				};
+			};
+		</script>
+	</body>
+</html>

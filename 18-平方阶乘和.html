@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var m=prompt("请输入")
+			var n=prompt("请输入")
+			function fun1(a){
+				return a**2}
+			function fun2(b){
+				if(b!=1){b*=fun2(--b)}
+				return b}
+			function fun3(c,d){
+				return c+d}
+			alert(fun3(fun2(fun1(m)),fun2(fun1(n))))
+		</script>
+	</body>
+</html>

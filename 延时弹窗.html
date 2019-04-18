@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.warring{
+				width: 100px;height: 50px;border: 1px #000 solid;
+				text-align: center;line-height: 50px;
+				position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin: auto;}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// 创建button标签
+			var btn=document.createElement("button");
+			// 给button添加内容
+			btn.innerHTML="按我";
+			// 向body插入button标签
+			document.body.appendChild(btn);
+			// 给button绑定事件
+			btn.onclick=function(){
+				// 创建div标签作为弹窗提示
+				var warring=document.createElement("div");
+				// 添加弹窗提示内容
+				warring.innerHTML="warring";
+				// 给div绑定class名关联样式
+				warring.className="warring"
+				// 插入到body
+				document.body.appendChild(warring);
+				// 延时1秒消失
+				var timer=setTimeout(function(){
+					document.body.removeChild(warring);
+				},1000);
+				// 如果鼠标进入弹窗提示不消失
+				warring.onmouseenter=function(){
+					clearTimeout(timer);
+				};
+				// 如果鼠标离开再次延时1秒消失
+				warring.onmouseleave=function(){
+					// !!!!!!!!!
+					// 此处不能var,否则称为局部变量,无法clear
+					// !!!!!!!!!
+					timer=setTimeout(function(){
+						document.body.removeChild(warring);
+					},1000);
+				};
+			};
+		</script>
+	</body>
+</html>

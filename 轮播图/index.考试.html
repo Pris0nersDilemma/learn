@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style>
+* {margin:0; padding:0; }
+li{list-style:none; }
+#div1 {width:850px; height:500px; margin:50px auto; overflow:hidden; position:relative;}
+#div1 ul li{height:500px;opacity: 0;position: absolute;left: 0;top: 0;z-index: 0;transition: opacity 1s;}
+#div1 ul .ac{z-index: 5;opacity: 1;}
+#div1 ol {position:absolute;right: 10%;bottom: 10px;z-index:6}
+#div1 ol li{width: 20px;height: 20px;background: #fff;margin-left: 5px;float: left;line-height: 20px;text-align: center;cursor: pointer;}
+#div1 ol .ac{background: red;color: #fff;}
+#div1>a{text-decoration: none;position: absolute;top: 50%;margin-top: -10px;height: 40px;line-height: 32px;text-align: center;width: 40px;font-size: 40px;vertical-align: middle;color: #fff;background: rgba(0,0,0,0.5);z-index:6;}
+#goPrev{left: 0;}
+#goNext{right: 0;}
+img{width:850px; height:500px;}
+</style>
+<script src="../tools.js"></script>
+</head>
+
+<body>
+	<div id="div1">
+		<ul>
+			<li class="ac"><a href="javascript:alert(0);"><img src="1.jpg" /></a></li>
+			<li><a href="javascript:alert(1);"><img src="2.jpg" /></a></li>
+			<li><a href="javascript:alert(2);"><img src="3.jpg" /></a></li>
+			<li><a href="javascript:alert(3);"><img src="4.jpg" /></a></li>
+			<li><a href="javascript:alert(4);"><img src="5.jpg" /></a></li>
+		</ul>
+		<ol>
+			<li class="ac">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+		<a href="javascript:;" id="goPrev">&laquo;</a>
+		<a href="javascript:;" id="goNext">&raquo;</a>
+	</div>
+	<script>
+		var div=document.querySelector("#div1"),
+			pics=div.children[0].querySelectorAll("li"),
+			btns=div.children[1].querySelectorAll("li"),
+			l=div.querySelector("#goPrev"),
+			r=div.querySelector("#goNext");
+		var now=0,last=0,timer=null;
+		// 
+		fun=function(){
+			console.log(now, last);
+			// 必须先移除再添加,否则2次点击会消失
+			pics[last].classList.remove("ac");
+			btns[last].classList.remove("ac");
+			pics[now].classList.add("ac");
+			btns[now].classList.add("ac");
+			last=now;
+		}
+		// 自动播放
+		auto=function(){
+			timer=setInterval(function(){
+				now=++now%pics.length;fun();
+			},2000)
+		}
+		auto();
+		// 鼠标进入停止自动播放
+		div.onmouseenter=function(){clearInterval(timer);}
+		// 鼠标离开自动播放
+		div.onmouseleave=function(){auto();}
+		// 上一张
+		l.onclick=function(){if(--now<0) now=pics.length-1;fun();}
+		// 下一张
+		r.onclick=function(){now=++now%pics.length;fun();}
+		// 按钮点击
+		for(let i=0;i<pics.length;i++){
+			btns[i].onclick=function(){now=i;fun();}
+		}
+	</script>
+</body>
+</html>

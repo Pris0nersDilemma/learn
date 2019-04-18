@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			for (i=100;i<1000;i++) {
+				var gnum=i%10;
+				var snum=parseInt(i/10)%10;
+				var bnum=parseInt(i/100);
+				if (i==gnum**3+snum**3+bnum**3) {
+					document.write(i+" ");
+				};
+			};
+		</script>
+	</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var m=prompt("请输入")
+			var n=prompt("请输入")
+			fun2(m,n)
+			
+			function fun2(m,n){
+				for(i=m;i<=n;i++){
+					if(i==fun1(i))
+					document.write(i+" ")
+				}
+			}
+			
+			function fun1(a){
+				var sum=0
+				for (k=1;k<a;k++) {
+					if(a%k===0){sum+=k}
+				}
+				return sum
+			}
+			
+		</script>
+	</body>
+</html>

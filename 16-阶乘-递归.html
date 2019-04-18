@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var m=prompt("")
+			alert(fun(m));
+			
+			function fun(n){
+// 				if(n==1){}
+// 				else{n*=fun(--n)}
+// 				return n
+				if(n!=1){n*=fun(--n)}
+				return n
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!-- 把稀疏数组变为不稀疏数组 -->
+		<script type="text/javascript">
+			fun(a=[6,4,6,4,,,,5,,4,,4])
+			function fun(a){
+				console.log(a);
+				for (i=0;i<a.length;i++) {
+					if (a[i]==null) {
+						a.splice(i);
+					};
+				};
+				console.log(a);
+			}
+		</script>
+	</body>
+</html>
