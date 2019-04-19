@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>最简单的轮播效果</title>
+		<style>
+			* {margin: 0;padding: 0}
+			#box{width: 850px;height: 500px;margin: 100px auto;position: relative;overflow: hidden;}
+			#box img{width: 850px;height: 500px;vertical-align: top}
+			ul {width: 1000%;position: absolute;list-style: none;left:0;top: 0;}
+			#box li{float: left;}
+			ol {position: absolute;height: 20px;right: 20px;bottom: 20px;text-align: center;padding: 5px;}
+			ol li{display: inline-block;width: 20px;height: 20px;line-height: 20px;background-color: #fff;margin: 5px;cursor: pointer;border-radius: 10px;}
+			ol .ac{background-color: red;}
+			#arr span{width: 40px;height: 40px;background: #fff;position: absolute;left: 0;top: 50%;margin-top: -20px;cursor: pointer;line-height: 40px;text-align: center;font-weight: bold;font-family: '黑体';font-size: 30px;color: #000;opacity: 0.5;border: 1px solid #fff;}
+			#arr #right {right: 0;left: auto;}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<ul>
+				<li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+				<li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+				<li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+				<li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+				<li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+				<li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+			</ul>
+			<ol class="bar">
+				<li class="ac">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+			</ol>
+			<div id="arr">
+				<span id="left"> <</span>
+				<span id="right">></span>
+			</div>
+		</div>
+
+		 <script>
+			//获取各元素
+			var box=document.getElementById("box");
+			var ul=box.children[0];
+			var li=ul.children;
+			// console.log(li.length); //6
+			var liBtn=box.children[1].children;
+			var moveWidth=box.offsetWidth;
+			var left=document.getElementById("left");
+			var right=document.getElementById("right");
+			var pic=0; //记录图片索引
+			//给所有按钮绑定事件
+			for(let i=0;i<liBtn.length;i++){
+				//为按钮注册mouseover事件
+				liBtn[i].onclick=function () {
+					for(let j=0;j<liBtn.length;j++){liBtn[j].className = "";}
+					this.className="ac"; // 先清除所有按钮的样式
+					pic=i;
+					picMove(ul,-pic*moveWidth);
+				}
+			}
+
+			// 自动播放
+			var timer=setInterval(picChange,3000);
+			
+			//鼠标进入暂停退出继续
+			box.onmouseenter=()=>{clearInterval(timer);};
+			box.onmouseleave=()=>{timer=setInterval(picChange,3000);};
+			
+			//左右焦点实现点击切换图片功能
+			right.onclick=picChange;
+			left.onclick=()=>{
+				// 如果点击第一张图,没有平移效果,所以改成第6张图
+				if (pic==0){
+					pic=li.length-1;
+					ul.style.left=-pic*moveWidth+"px";
+				}
+				pic--;
+				picMove(ul,-pic*moveWidth);
+				for (let i = 0; i < liBtn.length; i++) {liBtn[i].className = "";}
+				//当前的pic索引对应的按钮设置颜色
+				liBtn[pic].className = "ac";
+			}
+			// 判断切换到哪一张
+			function picChange(){
+				// console.log(ul); // 6
+				// console.log(li.length); // 6
+				console.log(pic);
+				//如果pic的值是5,页面显示第六个图片,而用户会认为这是第一个图,
+				//所以,如果用户再次点击按钮,用户应该看到第二个图片
+				if (pic == li.length-1) {
+					ul.style.left = 0+"px";//把ul的位置还原成开始的默认位置,从第6个图,跳转到第一个图
+					pic = 0;// pic变成第一张图索引
+				}
+				pic++;//立刻设置pic加1,那么此时用户就会看到第二个图片了
+				picMove(ul, -pic*moveWidth);//pic从0的值加1之后,pic的值是1,然后ul移动出去一个图片
+				//如果pic==5说明,此时显示第6个图(内容是第一张图片),第一个小按钮有颜色,
+				console.log(pic);
+				if (pic == li.length-1) {
+					liBtn[liBtn.length-1].className = ""; // 清除第五个按钮颜色
+					liBtn[0].className="ac"; // 第一个按钮颜色设置上
+				} else {
+					for (var i = 0; i < liBtn.length; i++) {liBtn[i].className="";}
+					liBtn[pic].className="ac"; // 清除所有的小按钮的背景颜色
+				}
+			}
+			
+			//移动过程：任意一个元素移动到指定的目标位置
+			function picMove(item, target) {
+				clearInterval(item.timer);
+				//定时器的id值存储到对象的一个属性中
+				item.timer = setInterval(()=>{
+					var _left = item.offsetLeft; // 获取元素的当前的位置,数字类型
+					var step = 10; // 每次移动的距离
+					step = _left < target ? step : -step;
+					_left += step; // 当前移动到位置
+					if (Math.abs(_left - target) > Math.abs(step)) {
+						item.style.left = _left + "px";
+					} else {
+						clearInterval(item.timer); // 清理定时器
+						item.style.left = target + "px"; // 直接到达目标
+					}
+				}, 10);
+			}
+		</script>
+	</body>
+</html>

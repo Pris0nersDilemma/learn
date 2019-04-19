@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>最简单的轮播效果</title>
+	<style>
+		* {margin: 0;padding: 0}
+		#box{width: 500px;height: 300px;margin: 100px auto;position: relative;overflow: hidden;}
+		#box img{width: 500px;height: 300px;vertical-align: top}
+		ul {width: 1000%;position: absolute;list-style: none;left:0;top: 0;}
+		#box li{float: left;}
+		ol {position: absolute;height: 20px;right: 20px;bottom: 20px;text-align: center;padding: 5px;}
+		ol li{display: inline-block;width: 20px;height: 20px;line-height: 20px;background-color: #fff;margin: 5px;cursor: pointer;}
+		ol .ac{background-color: red;}
+		.arr span{width: 40px;height: 40px;position: absolute;left: 5px;top: 50%;margin-top: -20px;background: #fff;cursor: pointer;line-height: 40px;text-align: center;font-weight: bold;font-family: '黑体';font-size: 30px;color: #000;opacity: 0.5;border: 1px solid #fff;}
+		.arr .right {right: 5px;left: auto;}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+		</ul>
+		<ol class="bar">
+			<li class="ac">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+		<div class="arr">
+			<span class="left"> <</span>
+			<span class="right">></span>
+		</div>
+	</div>
+
+ <script>
+	 class Banner {
+		constructor(selector) {
+			this.box=document.getElementById("box");
+			this.ul=this.box.children[0];
+			// console.log(this.ul);
+			this.li=Array.from(this.ul.children); //6
+			this.num=this.li.length; // 共计图片
+			// console.log(this.num); //6
+			// console.log(this.li); //[li, li, li, li, li, li]
+			this.liBtn=Array.from(this.box.children[1].children);
+			this.moveWidth=this.box.offsetWidth;
+			this.left=document.querySelector(".left");
+			this.right=document.querySelector(".right");
+			this.pic=0; //记录图片索引
+			// console.log(this.pic);
+			this.timer=null;
+			this.bindEvents();
+			this.auto();
+		}
+		
+		bindEvents() {
+			// console.log(this); //对象
+			//鼠标进入暂停退出继续
+			let _this=this;
+			this.box.onmouseenter=()=>{clearInterval(_this.timer);};
+			this.box.onmouseleave=()=>{_this.timer=setInterval(_this.picChange,3000);};
+			this.box.onclick = e => {
+				e = e||window.event;
+				let target = e.target||e.srcElement;
+				switch(target.className) {
+					case "right" : this.picChange; break;
+					case "left" : this.leftOnclick; break;
+				}
+			}
+			this.liBtn.forEach(liBtn => {
+				liBtn.onclick=()=>{this.liBtnChange(liBtn);}
+			})
+		}
+			//左右焦点实现点击切换图片功能
+		leftOnclick(){
+			// 如果点击第一张图,没有平移效果,所以改成第6张图
+			if (this.pic==0){
+				this.pic=this.num-1;
+				this.ul.style.left=-this.pic*this.moveWidth+"px";
+			}
+			this.pic--;
+			this.picMove(ul,-this.pic*this.moveWidth);
+			for (let i = 0; i < this.liBtn.length; i++) {this.liBtn[i].className = "";}
+			//当前的pic索引对应的按钮设置颜色
+			this.liBtn[this.pic].className = "ac";
+		}
+		
+		// 自动播放
+		auto(){
+			console.log(this);
+			let _this=this;
+			_this.timer=setInterval(_this.picChange(),3000);
+		}
+		
+		
+		// 判断切换到哪一张
+		picChange(){
+			console.log(this);
+			// console.log(this.ul); // 6
+			// console.log(this.num); // 6
+			console.log(this.pic);
+			//如果pic的值是5,页面显示第六个图片,而用户会认为这是第一个图,
+			//所以,如果用户再次点击按钮,用户应该看到第二个图片
+			if (this.pic == this.num-1) {
+				this.ul.style.left = 0+"px";//把ul的位置还原成开始的默认位置,从第6个图,跳转到第一个图
+				this.pic = 0;// pic变成第一张图索引
+			}
+			this.pic++;//立刻设置pic加1,那么此时用户就会看到第二个图片了
+			this.picMove.bind(this,this.ul, -this.pic*this.moveWidth);//pic从0的值加1之后,pic的值是1,然后ul移动出去一个图片
+			//如果pic==5说明,此时显示第6个图(内容是第一张图片),第一个小按钮有颜色,
+			console.log(this.pic);
+			if (this.pic == this.num-1) {
+				this.liBtn[this.liBtn.length-1].className = ""; // 清除第五个按钮颜色
+				this.liBtn[0].className="ac"; // 第一个按钮颜色设置上
+			} else {
+				for (var i = 0; i < this.liBtn.length; i++) {this.liBtn[i].className="";}
+				this.liBtn[this.pic].className="ac"; // 清除所有的小按钮的背景颜色
+			}
+		}
+		
+		//移动过程：任意一个元素移动到指定的目标位置
+		picMove(item, end) {
+			clearInterval(item.timer);
+			//定时器的id值存储到对象的一个属性中
+			item.timer = setInterval(()=>{
+				let _left = item.offsetLeft; // 获取元素的当前的位置,数字类型
+				let step = 10; // 每次移动的距离
+				step = _left < end ? step : -step;
+				_left += step; // 当前移动到位置
+				if (Math.abs(_left - end) > Math.abs(step)) {
+					item.style.left = _left + "px";
+				} else {
+					clearInterval(item.timer); // 清理定时器
+					item.style.left = end + "px"; // 直接到达目标
+				}
+			}, 10);
+		}
+	}
+	new Banner("#box");
+</script>
+</body>
+</html>

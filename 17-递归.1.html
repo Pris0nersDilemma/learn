@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			// 用JavaScript编写一个递归函数dep(), 实现需求：一年薪资是10k，涨幅每年0.5%，那么50年后薪资多少钱？
+			var t=0.005;
+			var n=50
+			document.write(dep(n));
+			
+			function fn(n){
+				if(n==1) return 10000;
+				return fn(n-1)*(1+t);
+			}
+			
+			function dep(n){
+				if(n==1) return 10000;
+				return fn(n)+dep(n-1);
+			}
+// 			
+// 			function dep(n){
+// 				if(n==1){}
+// 				else{m+=m*(1+t);dep(n--)}
+// 				return m;
+				
+// 				if(n!=50){n*10000*=fun(--n)}
+// 				return n
+// 			}
+		</script>
+	</body>
+</html>

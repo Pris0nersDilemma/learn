@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>最简单的轮播效果</title>
+	<style>
+		* {margin: 0;padding: 0}
+		#box{width: 500px;height: 300px;margin: 100px auto;position: relative;overflow: hidden;}
+		#box img{width: 500px;height: 300px;vertical-align: top}
+		ul {width: 1000%;position: absolute;list-style: none;left:0;top: 0;}
+		#box li{float: left;}
+		ol {position: absolute;height: 20px;right: 20px;bottom: 20px;text-align: center;padding: 5px;}
+		ol li{display: inline-block;width: 20px;height: 20px;line-height: 20px;background-color: #fff;margin: 5px;cursor: pointer;}
+		ol .ac{background-color: red;}
+		#arr span{width: 40px;height: 40px;position: absolute;left: 5px;top: 50%;margin-top: -20px;background: #fff;cursor: pointer;line-height: 40px;text-align: center;font-weight: bold;font-family: '黑体';font-size: 30px;color: #000;opacity: 0.5;border: 1px solid #fff;}
+		#arr #right {right: 5px;left: auto;}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li><a href="#"><img src="img/1.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/2.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/3.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/4.jpg" alt=""></a></li>
+			<li><a href="#"><img src="img/5.jpg" alt=""></a></li>
+		</ul>
+		<ol class="bar">
+			<li class="ac">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+		<div id="arr">
+			<span id="left"> <</span>
+			<span id="right">></span>
+		</div>
+	</div>
+
+ <script>
+	//获取各元素
+	var box=document.getElementById("box");
+	var ul=box.children[0];
+	var li=ul.children;
+	console.log(li.length);
+	var ol=box.children[1];
+	var liBtn=ol.children;
+	var arr=document.getElementById("arr");
+	var moveWidth=box.offsetWidth;
+	var left=document.getElementById("left");
+	var right=document.getElementById("right");
+	var pic=0; //记录图片索引
+	//根据li个数，创建小按钮
+	for(let i=0;i<liBtn.length;i++){
+		//为按钮注册mouseover事件
+		liBtn[i].onclick=function () {
+			//先清除所有按钮的样式
+			for (let j=0;j<liBtn.length;j++){
+				liBtn[j].className = "";
+			}
+			this.className="ac";
+			pic=i;
+			moveFun(ul,-pic*moveWidth);
+		}
+	}
+
+	// 自动播放
+	var timer=setInterval(nextPic,3000);
+	
+	//鼠标进入暂停退出继续
+	box.onmouseenter=()=>{clearInterval(timer);};
+	box.onmouseleave=()=>{timer=setInterval(nextPic,3000);};
+	
+	//左右切换图片
+	right.onclick=nextPic;
+	left.onclick=()=>{
+		if (pic==0){
+			pic=li.length-1;
+			ul.style.left=-pic*moveWidth+"px";
+		}
+		pic--;
+		moveFun(ul,-pic*moveWidth);
+		for (var i = 0; i < liBtn.length; i++) {liBtn[i].className = "";}
+		//当前的pic索引对应的按钮设置颜色
+		liBtn[pic].className = "ac";
+	}
+
+	//克隆一个ul中第一个li,加入到ul中的最后
+	ul.appendChild(ul.children[0].cloneNode(true));
+	console.log(li.length);
+
+	function nextPic(){
+		// console.log(ul);
+		//如果pic的值是5,恰巧是ul中li的个数-1的值,此时页面显示第六个图片,而用户会认为这是第一个图,
+		//所以,如果用户再次点击按钮,用户应该看到第二个图片
+		console.log(li.length);
+		console.log(pic);
+		if (pic == li.length - 1) {
+			//从第6个图,跳转到第一个图
+			pic = 0;//先设置pic=0
+			ul.style.left = 0 + "px";//把ul的位置还原成开始的默认位置
+		}
+		pic++;//立刻设置pic加1,那么此时用户就会看到第二个图片了
+		moveFun(ul, -pic*moveWidth);//pic从0的值加1之后,pic的值是1,然后ul移动出去一个图片
+		//如果pic==5说明,此时显示第6个图(内容是第一张图片),第一个小按钮有颜色,
+		console.log(pic);
+		if (pic == li.length - 1) {
+			//第五个按钮颜色干掉
+			liBtn[liBtn.length - 1].className = "";
+			//第一个按钮颜色设置上
+			liBtn[0].className = "ac";
+		} else {
+			//干掉所有的小按钮的背景颜色
+			for (var i = 0; i < liBtn.length; i++) {
+				liBtn[i].className = "";
+			}
+			liBtn[pic].className = "ac";
+		}
+	}
+	
+	//移动过程：任意一个元素移动到指定的目标位置
+	function moveFun(item, target) {
+		clearInterval(item.timer);
+		//定时器的id值存储到对象的一个属性中
+		item.timer = setInterval(()=>{
+			//获取元素的当前的位置,数字类型
+			var _left = item.offsetLeft;
+			//每次移动的距离
+			var step = 10;
+			step = _left < target ? step : -step;
+			//当前移动到位置
+			_left += step;
+			if (Math.abs(_left - target) > Math.abs(step)) {
+				item.style.left = _left + "px";
+			} else {
+				//清理定时器
+				clearInterval(item.timer);
+				//直接到达目标
+				item.style.left = target + "px";
+			}
+        }, 10);
+    }
+</script>
+</body>
+</html>
